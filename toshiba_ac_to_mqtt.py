@@ -16,7 +16,7 @@ import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(name)s: %(message)s')
 # logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-logger.setLevel( logging.DEBUG )
+logger.setLevel( logging.INFO )
 mqtt_logger = logging.getLogger("MQTT")
 mqtt_logger.setLevel( logging.INFO )
 
@@ -176,7 +176,6 @@ async def mqtt_ac_task():
         async def handle_ac_cmd( messages, devices ):
             async for msg in messages:
                 if msg.payload.decode() == 'status':
-                    logger.debug( 'Received global status request' )
                     await state_update_all_dev( devices )
                 else:
                     mqtt_logger.warning( f'Not implemented: Message received on topic "{msg.topic}": {str(msg.payload)}' )

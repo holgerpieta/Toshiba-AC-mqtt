@@ -19,7 +19,7 @@ import traceback
 import random
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel( logging.DEBUG )
+logger.setLevel( logging.INFO )
 
 from toshiba_ac.http_api import ToshibaAcHttpApi
 from toshiba_ac.amqp_api import ToshibaAcAmqpApi
