@@ -1,0 +1,40 @@
+# Copyright 2021 Holger Pieta
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+[Unit]
+Description=Podman container-smart-home_toshiba-ac.service
+Wants=network.target
+After=network-online.target
+#BindsTo=pod-smart-home.service
+Wants=container-smart-home_mosquitto.service container-smart-home_node-red.service
+After=container-smart-home_mosquitto.service container-smart-home_node-red.service
+StartLimitIntervalSec=20m
+StartLimitBurst=3
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+Restart=always
+RestartSec=300
+
+#Restart=no
+TimeoutStopSec=70
+ExecStartPre=/bin/rm -f %t/container-smart-home_toshiba-ac.pid %t/container-smart-home_toshiba-ac.ctr-id
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/container-smart-home_toshiba-ac.pid --cidfile %t/container-smart-home_toshiba-ac.ctr-id --cgroups=no-conmon --replace -dt --label io.containers.autoupdate=image --name smart-home_toshiba-ac --net=host toshiba_ac
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/container-smart-home_toshiba-ac.ctr-id -t 10
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/container-smart-home_toshiba-ac.ctr-id
+PIDFile=%t/container-smart-home_toshiba-ac.pid
+Type=forking
+
+[Install]
+WantedBy=multi-user.target default.target
