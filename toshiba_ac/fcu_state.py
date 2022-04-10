@@ -124,6 +124,7 @@ class ToshibaAcFcuState:
         NONE = _NONE_VAL
 
     class AcScheduler(Enum):
+        UNKNOWN = 0x00
         ON = 0x01
         OFF = 0x02
         NONE = _NONE_VAL
