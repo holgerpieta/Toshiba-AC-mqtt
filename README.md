@@ -21,7 +21,7 @@ Toshiba AC to MQTT bridge
 - `ac/[dev_name]/power`: Published every 10 minutes. Average power during the last 10 minutes in W.
 
 ## Subscribes (listens)
-- `ac/[dev_name]/status`: Send commands to the ACs. Uses same format as the status updates.
+- `ac/[dev_name]/cmd`: Send commands to the ACs. Uses same format as the status updates.
   - TODO: Full documentation of all values.
 
 # Under the hood
