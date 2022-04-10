@@ -130,3 +130,7 @@ dmypy.json
 
 # Visual Studio Code
 .vscode
+
+# Misc
+toshiba_ac.bak
+toshiba_ac_to_mqtt_local.py
