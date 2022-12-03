@@ -1,5 +1,4 @@
-# Copyright 2021 Kamil Sroka
-# Copyright 2021 Holger Pieta
+# Copyright 2022 Kamil Sroka, Holger Pieta
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -112,9 +111,8 @@ class ToshibaAcDevice:
         self.fcu = additional_info.fcu
 
     def load_supported_merit_features(self, merit_feature_hexstring, ac_model_id):
-        logger.debug( f'merit_string: {merit_feature_hexstring[:2]}' )
         try:
-            merit_byte, = struct.unpack('B', bytes.fromhex(merit_feature_hexstring[:2]))
+            merit_byte, = struct.unpack('b', bytes.fromhex(merit_feature_hexstring[:2]))
         except (TypeError, ValueError, struct.error):
             ac_model_id = '1'
 
@@ -126,10 +124,6 @@ class ToshibaAcDevice:
             supported_a_features.append(ToshibaAcFcuState.AcMeritAFeature.HIGH_POWER)
             supported_a_features.append(ToshibaAcFcuState.AcMeritAFeature.ECO)
 
-            logger.debug( f'merit_byte: {merit_byte}' )
-            logger.debug( f'merit_byte:80b: {merit_byte:08b}' )
-            merit_byte_join = '0' + '0'.join(f'{merit_byte:08b}')
-            logger.debug( f'merit_byte_join: {merit_byte_join}' )
             floor, _, cdu_silent, pure_ion, fireplace, heating_8c, _, _ = struct.unpack('????????', bytes.fromhex('0' + '0'.join(f'{merit_byte:08b}')))
 
             if floor:

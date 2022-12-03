@@ -1,5 +1,4 @@
-# Copyright 2021 Kamil Sroka
-# Copyright 2021 Holger Pieta
+# Copyright 2022 Kamil Sroka, Holger Pieta
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -81,6 +80,7 @@ class ToshibaAcFcuState:
     class AcMeritBFeature(Enum):
         FIREPLACE_1 = 0x02
         FIREPLACE_2 = 0x03
+        UNKOWN = 0x01
         OFF = 0x00
         NONE = _NONE_VAL
 
