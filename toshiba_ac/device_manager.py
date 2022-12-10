@@ -19,7 +19,7 @@ import traceback
 import random
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel( logging.INFO )
+logger.setLevel( logging.DEBUG )
 
 from toshiba_ac.http_api import ToshibaAcHttpApi
 from toshiba_ac.amqp_api import ToshibaAcAmqpApi
@@ -69,19 +69,26 @@ class ToshibaAcDeviceManager:
             return self.sas_token
 
     async def shutdown(self):
+        logger.debug( 'Shutting down. Getting lock...' )
         async with self.lock:
+            logger.debug( '...got lock' )
             if self.periodic_fetch_energy_consumption_task:
+                logger.debug( 'Canceling energy tasks...' )
                 self.periodic_fetch_energy_consumption_task.cancel()
 
+            logger.debug( 'Shutting down devices...' )
             await asyncio.gather(*[device.shutdown() for device in self.devices.values()])
 
             if self.amqp_api:
+                logger.debug( 'Shutting down AMQP...' )
                 await self.amqp_api.shutdown()
                 self.amqp_api = None
 
             if self.http_api:
+                logger.debug( 'Shutting down HTTP...' )
                 await self.http_api.shutdown()
                 self.http_api = None
+        logger.debug( 'Shutdown complete' )
 
     async def periodic_fetch_energy_consumption(self):
         while True:
