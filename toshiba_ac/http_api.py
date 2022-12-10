@@ -20,7 +20,7 @@ import datetime
 
 import logging
 logger = logging.getLogger(__name__)
-#logger.setLevel( logging.DEBUG )
+logger.setLevel( logging.DEBUG )
 
 from toshiba_ac.device import ToshibaAcDeviceEnergyConsumption
 
@@ -83,8 +83,12 @@ class ToshibaAcHttpApi:
             logger.debug(f'Sending GET to {url} with params={get}, headers={headers}')
 
         async with method() as response:
-            json = await response.json()
-            logger.debug(f'Response code: {response.status}, JSON: {json}')
+            try:
+                json = await response.json()
+                logger.debug(f'Response code: {response.status}, JSON: {json}')
+            except Exception as err:
+                logger.debug(f'Request failed: {response.status} - {response.reason} - {response.content}')
+                raise err
 
             err_type = ToshibaAcHttpApiError
 
