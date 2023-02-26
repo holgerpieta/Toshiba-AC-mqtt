@@ -559,15 +559,3 @@ class ToshibaAcFcuState:
         res += f', IAC: {self.ac_iac.name}'
 
         return res
-
-    def forJson( self ):#
-        res = {}
-        for name, val in vars( self ).items():
-            # Only add Enums (i.e. status values) and if they are not empty
-            if isinstance( val, Enum ) and val.value is not _NONE_VAL and val.name != 'UNKNOWN':
-                # Special treatment for temperature and RPM values
-                if 'temperature' in name or 'rpm' in name:
-                    res[name[1:]] = int( val.name )
-                else:
-                    res[name[1:]] = val.value
-        return res

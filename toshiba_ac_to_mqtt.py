@@ -133,7 +133,7 @@ async def mqtt_ac_task():
         # Send updated state to MQTT
         async def state_update( dev, state ):
             topic = f'{topic_root}/{dev.name}/{status_suffix}'
-            state_flt = state.forJson()
+            state_flt = dev.forJson()
             if state_flt:
                 msg = json.dumps( { 'Name': dev.name, 'Status': state_flt } )
                 logger.debug( f'Sending MQTT status update with topic {topic}: {msg}' )
