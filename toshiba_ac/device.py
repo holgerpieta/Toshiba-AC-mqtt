@@ -16,11 +16,12 @@ import asyncio
 import datetime
 import struct
 import random
+from enum import Enum
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel( logging.INFO )
 
-from toshiba_ac.fcu_state import ToshibaAcFcuState
+from toshiba_ac.fcu_state import ToshibaAcFcuState, _NONE_VAL
 from toshiba_ac.utils import async_sleep_until_next_multiply_of_minutes
 
 from azure.iot.device import Message
@@ -485,7 +486,7 @@ class ToshibaAcDevice:
 
     def forJson( self ):#
         res = {}
-        for name, val in vars( self ).items():
+        for name, val in vars( self.fcu_state_delta ).items():
             # Only add Enums (i.e. status values) and if they are not empty
             if isinstance( val, Enum ) and val.value is not _NONE_VAL and val.name != 'UNKNOWN':
                 # Special treatment for temperature and RPM values

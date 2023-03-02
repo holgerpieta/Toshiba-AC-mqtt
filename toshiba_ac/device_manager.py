@@ -69,19 +69,25 @@ class ToshibaAcDeviceManager:
             return self.sas_token
 
     async def shutdown(self):
+        logger.debug( 'Shutdown called' )
         async with self.lock:
+            logger.debug( 'Shutdown lock acquired' )
             if self.periodic_fetch_energy_consumption_task:
                 self.periodic_fetch_energy_consumption_task.cancel()
+            logger.debug( 'Shutdown cancel sent' )
 
             await asyncio.gather(*[device.shutdown() for device in self.devices.values()])
+            logger.debug( 'Shutdown devices complete' )
 
             if self.amqp_api:
                 await self.amqp_api.shutdown()
                 self.amqp_api = None
+            logger.debug( 'Shutdown AMQP API complete' )
 
             if self.http_api:
                 await self.http_api.shutdown()
                 self.http_api = None
+            logger.debug( 'Shutdown HTTP API complete' )
 
     async def periodic_fetch_energy_consumption(self):
         while True:
